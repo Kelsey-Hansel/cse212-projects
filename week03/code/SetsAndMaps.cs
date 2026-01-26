@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.VisualBasic;
 
 public static class SetsAndMaps
 {
@@ -21,8 +22,33 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // duplicate the list
+        // variable to store results
+        // foreach loop to check each item
+        // variable to reverse current item
+        //      using array, reverse string and store in variable
+        // if statement checking if the reverse exists in the list
+        //      add to results variable, remove from duplicate list
+
+        var pairChecker = new List<string>(words);
+        var results = new List<string>();
+        foreach (string word in words)
+        {
+            char[] reverseArray = word.ToCharArray();
+            Array.Reverse(reverseArray);
+            string reverseString = new string(reverseArray);
+
+            if (pairChecker.Contains(reverseString) && word != reverseString)
+            {
+                string result = word + " & " + reverseString;
+                results.Add(result);
+                pairChecker.Remove(word);
+            }
+        }
+
+        string[] resultsArray = results.ToArray();
+
+        return resultsArray;
     }
 
     /// <summary>
