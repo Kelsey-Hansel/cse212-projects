@@ -64,11 +64,22 @@ public static class SetsAndMaps
     /// <returns>fixed array of divisors</returns>
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
+        // degree is the 4th item in each line, so index 3
+        // check all keys to see if it is new or if it has been seen already and update count accordingly
+
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            var degreeKey = fields[3];
+            if (degrees.ContainsKey(degreeKey))
+            {
+                degrees[degreeKey] += 1;
+            }
+            else
+            {
+                degrees[degreeKey] = 1;
+            }
         }
 
         return degrees;
@@ -92,8 +103,45 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // dictionary to keep track of letter count
+        // foreach loop to iterate through each letter and update count
+        // compare length of words without spaces, if not equal then not anagrams
+        // compare the count of each letter between both words
+        
+        var charCompare = new Dictionary<char, int>();
+        var word1NoSpaces = word1.Replace(" ", "");
+        var word2NoSpaces = word2.Replace(" ", "");
+
+        if (word1NoSpaces.Length != word2NoSpaces.Length)
+        {
+            return false;
+        }
+
+        foreach (char letter in word1NoSpaces.ToLower())
+        {
+            if (charCompare.ContainsKey(letter))
+            {
+                charCompare[letter] += 1;
+            }
+            else
+            {
+                charCompare[letter] = 1;
+            }
+        }
+
+        foreach (char letter in word2NoSpaces.ToLower())
+        {
+            if (!charCompare.ContainsKey(letter) || charCompare[letter] == 0)
+            {
+                return false;
+            }
+            else
+            {
+                charCompare[letter] -= 1;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
