@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Formats.Asn1;
+using System.Globalization;
 
 public class LinkedList : IEnumerable<int>
 {
@@ -32,7 +34,23 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void InsertTail(int value)
     {
-        // TODO Problem 1
+        // make a new node
+        // check if linked list is empty to know if the head and tail need to be updated to the same thing
+        // the current tail needs to be linked to the new node
+        // need to update the tail to the new node
+
+        Node newNode = new(value);
+        if (_tail is null)
+        {
+            _head = newNode;
+            _tail = newNode;
+        }
+        else
+        {
+            newNode.Prev = _tail;
+            _tail.Next = newNode;
+            _tail = newNode;
+        }
     }
 
 
@@ -64,7 +82,20 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void RemoveTail()
     {
-        // TODO Problem 2
+        // check if linked list is one node or empty to set them to null
+        // the current tail needs to remove the link connecting it's previous node to the tail as the next node
+        // set the previous node as the new tail
+
+        if (_head == _tail)
+        {
+            _head = null;
+            _tail = null;
+        }
+        else
+        {
+            _tail.Prev!.Next = null;
+            _tail = _tail.Prev;
+        }
     }
 
     /// <summary>
@@ -108,7 +139,37 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Remove(int value)
     {
-        // TODO Problem 3
+        // loop through each item until it is found
+        // compare target value to head, if values are equal, use the function call accordingly
+        // if not, when find target value, remove the links that connect the surrounding nodes to the current node
+        // make links to connect the surrounding nodes of the current one that skips over the current node
+        // return statement to break loop and finish function
+
+        Node? curr = _head;
+        while (curr is not null)
+        {
+            if (curr.Data == value)
+            {
+                if (curr == _head)
+                {
+                    RemoveHead();
+                }
+                else if (curr == _tail)
+                {
+                    RemoveTail();
+                }
+                else
+                {
+                    curr.Next!.Prev = curr.Prev;
+                    curr.Prev!.Next = curr.Next;
+                }
+                return;
+            }
+            else
+            {
+                curr = curr.Next;
+            }
+        }
     }
 
     /// <summary>
@@ -116,7 +177,22 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Replace(int oldValue, int newValue)
     {
-        // TODO Problem 4
+        // iterate through every item
+        // compare if current value is equal to 'oldValue'
+        // when true, set current value to 'newValue'
+
+        Node? curr = _head;
+        while (curr is not null)
+        {
+            if (curr.Data == oldValue)
+            {
+                curr.Data = newValue;
+            }
+            else
+            {
+                curr = curr.Next;
+            }
+        }
     }
 
     /// <summary>
@@ -146,8 +222,16 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public IEnumerable Reverse()
     {
-        // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        // start at tail
+        // yield current value
+        // iterate through using previous links
+
+        var curr = _tail;
+        while (curr is not null)
+        {
+            yield return curr.Data; // replace this line with the correct yield return statement(s)
+            curr = curr.Prev;
+        }
     }
 
     public override string ToString()
