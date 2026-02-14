@@ -78,9 +78,17 @@ public class BinarySearchTree : IEnumerable<int>
         }
     }
 
+    // Study TranverseForward() to understand how to reverse it.
     private void TraverseBackward(Node? node, List<int> values)
     {
-        // TODO Problem 3
+        // start with the right, to middle, then left
+
+        if (node is not null)
+        {
+            TraverseBackward(node.Right, values);
+            values.Add(node.Data);
+            TraverseBackward(node.Left, values);
+        }
     }
 
     /// <summary>
